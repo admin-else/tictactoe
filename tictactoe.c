@@ -113,7 +113,7 @@ enum Sign checkwin(enum Sign b[3][3]) {
 int play_game(enum Sign board[3][3]) {
 	clear_board(board);
 	print_board(board);
-    int       turn   = 0;
+	int       turn   = 0;
 	enum Sign player = CROSS;
 	enum Sign winner = NONE;
 	while (turn < 9 && winner == NONE) {
