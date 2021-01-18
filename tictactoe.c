@@ -76,11 +76,32 @@ int get_input_from_player(enum Sign board[3][3], const enum Sign sign){
 	return input;
 }
 
-int handle_input(enum Sign board[3][3], const enum Sign sign) {
-	// [X]: n
+int get_input_next_free_space(
+	enum Sign board[3][3],
+	__attribute__ ((unused)) const enum Sign sign
+) {
+	for (int i = 1; i <= 9; ++i) {
+		if (GET(board, i) == NONE) {
+			return i;
+		}
+	}
+	return 0;
+}
 
+int handle_input(
+	enum Sign board[3][3], const enum Sign sign,
+	int (*player_one_func)(enum Sign board[3][3], const enum Sign sign),
+	int (*player_two_func)(enum Sign board[3][3], const enum Sign sign)
+) {
+	// [X]: n
+	int retval = 0;
 	// FIXME: This function is currently able to edit board.
-	const int retval = get_input_from_player(board, sign);
+	if (sign == CROSS) {
+		retval = player_one_func(board, sign);
+	} else {
+		retval = player_two_func(board, sign);
+	}
+
 	if (retval == EOF) { return EOF; }
 	if (!(1 <= retval && retval <= 9)) {
 		fprintf(stderr, "Komischer fehler bei Spieler %c.\n", sign);
@@ -130,7 +151,9 @@ int play_game(enum Sign board[3][3]) {
 	enum Sign player = CROSS;
 	enum Sign winner = NONE;
 	while (turn < 9 && winner == NONE) {
-		const int err = handle_input(board, player);
+		const int err = handle_input(
+			board, player, &get_input_from_player, &get_input_next_free_space
+		);
 		if (err == EOF) { return 1; }
 		print_board(board);
 		winner = checkwin(board);
