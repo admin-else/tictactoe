@@ -48,8 +48,7 @@ int clear_stdin() {
 	return 0;
 }
 
-int handle_input(enum Sign board[3][3], const enum Sign sign) {
-	// [X]: n
+int get_input_from_player(enum Sign board[3][3], const enum Sign sign){
 	int input = 0;
 	while (1) {
 		if (isatty(fileno(stdin))) { printf("[%c]: ", sign); }
@@ -73,7 +72,21 @@ int handle_input(enum Sign board[3][3], const enum Sign sign) {
 		}
 		break;
 	}
-	GET(board, input) = sign;
+
+	return input;
+}
+
+int handle_input(enum Sign board[3][3], const enum Sign sign) {
+	// [X]: n
+
+	// FIXME: This function is currently able to edit board.
+	const int retval = get_input_from_player(board, sign);
+	if (retval == EOF) { return EOF; }
+	if (!(1 <= retval && retval <= 9)) {
+		fprintf(stderr, "Komischer fehler bei Spieler %c.\n", sign);
+		return 1;
+	}
+	GET(board, retval) = sign;
 	return 0;
 }
 
