@@ -9,19 +9,16 @@
   +−−−+−−−+−−−+
 */
 
+#include "tictactoe.h"
+
+#include "input_players.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 
-#define GET(board, input) (board[2 - (((input) -1) / 3)][((input) -1) % 3])
 #define BUFSIZE 32
 
-
-enum Sign {
-	NONE   = ' ',
-	CIRCLE = 'O',
-	CROSS  = 'X',
-};
 
 void clear_board(enum Sign board[3][3]) {
 	for (int i = 0; i < 3; ++i) {
@@ -45,46 +42,6 @@ int clear_stdin() {
 		if (!fgets(buf, BUFSIZE, stdin) || feof(stdin)) { return EOF; }
 		length = strlen(buf);
 	} while (!(length && buf[length - 1] == '\n'));
-	return 0;
-}
-
-int get_input_from_player(enum Sign board[3][3], const enum Sign sign){
-	int input = 0;
-	while (1) {
-		if (isatty(fileno(stdin))) { printf("[%c]: ", sign); }
-		int retval = scanf("%d", &input);
-		// The input stream is at EOF.
-		if (retval == EOF) { return EOF; }
-		clear_stdin();
-		if (retval == 0) {
-			puts("Bitte gebe eine Zahl am PIN-Feld unter 10 ein.");
-			continue;
-		}
-		// Invalid input.
-		if (!(1 <= input && input <= 9)) {
-			puts("Bitte gebe eine Zahl am PIN-Feld ein.");
-			continue;
-		}
-		const enum Sign oldsign = GET(board, input);
-		if (oldsign != NONE) {
-			printf("Hier steht schon %c.\n", oldsign);
-			continue;
-		}
-		break;
-	}
-
-	return input;
-}
-
-int get_input_next_free_space(
-	enum Sign board[3][3],
-	__attribute__ ((unused)) const enum Sign sign
-) {
-	for (int i = 1; i <= 9; ++i) {
-		if (GET(board, i) == NONE) {
-			return i;
-		}
-	}
 	return 0;
 }
 
