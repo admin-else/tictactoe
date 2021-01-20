@@ -15,7 +15,9 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 
 #define BUFSIZE 32
@@ -64,6 +66,11 @@ int handle_input(
 	if (!(1 <= retval && retval <= 9)) {
 		fprintf(stderr, "Komischer fehler bei Spieler %c.\n", sign);
 		return 1;
+	}
+	const enum Sign oldsign = GET(board, retval);
+	if (oldsign != NONE) {
+		printf("Hier steht schon %c.\n", oldsign);
+		return 2;
 	}
 	GET(board, retval) = sign;
 	return 0;
@@ -116,10 +123,10 @@ int play_game(enum Sign board[3][3], const bool is_multiplayer) {
 			);
 		} else {
 			err = handle_input(
-				board, player, &get_input_from_player, &get_input_next_free_space
+				board, player, &get_input_from_player, &get_input_random
 			);
 		}
-		if (err == EOF) { return 1; }
+		if (err) { return err; }
 		print_board(board);
 		winner = checkwin(board);
 		if (player == CIRCLE) {
@@ -132,8 +139,20 @@ int play_game(enum Sign board[3][3], const bool is_multiplayer) {
 
 	switch (winner) {
 	case NONE: puts("Niemand hat gewonnen."); break;
-	case CIRCLE: puts("Kreis hat gewonnen."); break;
-	case CROSS: puts("Kreuz hat gewonnen."); break;
+	case CROSS:
+		if (is_multiplayer) {
+			puts("Kreuz hat gewonnen.");
+		} else {
+			puts("Du hast gewwonen.");
+		}
+		break;
+	case CIRCLE:
+		if (is_multiplayer) {
+			puts("Kreis hat gewonnen.");
+		} else {
+			puts("Der Bot hat gewonnen.");
+		}
+		break;
 	}
 	return 0;
 }
@@ -146,6 +165,8 @@ int main(const int argc, const char *const argv[]) {
 			is_multiplayer = true;
 		}
 	}
+
+	srand(time(NULL));
 
 	enum Sign board[3][3];
 	bool      play_again = true;
