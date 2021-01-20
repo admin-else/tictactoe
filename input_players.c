@@ -2,6 +2,7 @@
 
 #include "tictactoe.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
 
@@ -17,7 +18,7 @@ int get_input_next_free_space(enum Sign board[3][3], const enum Sign sign) {
 
 int get_input_from_player(enum Sign board[3][3], const enum Sign sign) {
 	int input = 0;
-	while (1) {
+	while (true) {
 		if (isatty(fileno(stdin))) { printf("[%c]: ", sign); }
 		int retval = scanf("%d", &input);
 		// The input stream is at EOF.

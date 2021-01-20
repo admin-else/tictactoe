@@ -13,6 +13,7 @@
 
 #include "input_players.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -101,7 +102,7 @@ enum Sign checkwin(enum Sign b[3][3]) {
 	return NONE;
 }
 
-int play_game(enum Sign board[3][3], const int is_multiplayer) {
+int play_game(enum Sign board[3][3], const bool is_multiplayer) {
 	clear_board(board);
 	print_board(board);
 	int       turn   = 0;
@@ -138,16 +139,16 @@ int play_game(enum Sign board[3][3], const int is_multiplayer) {
 }
 
 int main(const int argc, const char *const argv[]) {
-	int is_multiplayer = 0;
+	bool is_multiplayer = false;
 
 	for (int arg = 0; arg < argc; ++arg) {
 		if (strcmp(argv[arg], "-m") == 0) {
-			is_multiplayer = 1;
+			is_multiplayer = true;
 		}
 	}
 
 	enum Sign board[3][3];
-	int       play_again = 1;
+	bool      play_again = true;
 	while (play_again) {
 		play_again    = 0;
 		const int err = play_game(board, is_multiplayer);
