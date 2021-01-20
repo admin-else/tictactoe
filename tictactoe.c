@@ -101,16 +101,23 @@ enum Sign checkwin(enum Sign b[3][3]) {
 	return NONE;
 }
 
-int play_game(enum Sign board[3][3]) {
+int play_game(enum Sign board[3][3], const int is_multiplayer) {
 	clear_board(board);
 	print_board(board);
 	int       turn   = 0;
 	enum Sign player = CROSS;
 	enum Sign winner = NONE;
 	while (turn < 9 && winner == NONE) {
-		const int err = handle_input(
-			board, player, &get_input_from_player, &get_input_next_free_space
-		);
+		int err = 0;
+		if (is_multiplayer) {
+			err = handle_input(
+				board, player, &get_input_from_player, &get_input_from_player
+			);
+		} else {
+			err = handle_input(
+				board, player, &get_input_from_player, &get_input_next_free_space
+			);
+		}
 		if (err == EOF) { return 1; }
 		print_board(board);
 		winner = checkwin(board);
@@ -130,12 +137,20 @@ int play_game(enum Sign board[3][3]) {
 	return 0;
 }
 
-int main() {
+int main(const int argc, const char *const argv[]) {
+	int is_multiplayer = 0;
+
+	for (int arg = 0; arg < argc; ++arg) {
+		if (strcmp(argv[arg], "-m") == 0) {
+			is_multiplayer = 1;
+		}
+	}
+
 	enum Sign board[3][3];
 	int       play_again = 1;
 	while (play_again) {
 		play_again    = 0;
-		const int err = play_game(board);
+		const int err = play_game(board, is_multiplayer);
 		if (err) { return 1; }
 		puts("Wenn sie noch einmal spielen wollen, geben sie 'J' ein.");
 		if (isatty(fileno(stdin))) { printf("J / N: "); }
