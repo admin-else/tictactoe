@@ -3,7 +3,8 @@
 CC := gcc
 WINCC := x86_64-w64-mingw32-gcc
 CFLAGS := -Wall -Wextra -O2
-BUILD := build # lin mode: BUILD=build , win mode: BUILD=build_win
+# lin mode: BUILD=build , win mode: BUILD=build_win
+BUILD := build
 
 ifeq (${BUILD}, build_win)
 CC := ${WINCC}
