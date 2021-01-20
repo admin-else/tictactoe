@@ -5,8 +5,8 @@
 
 enum Sign {
 	NONE   = ' ',
-	CIRCLE = 'O',
 	CROSS  = 'X',
+	CIRCLE = 'O',
 };
 
 int clear_stdin();
