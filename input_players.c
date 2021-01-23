@@ -17,30 +17,49 @@ int get_input_next_free_space(enum Sign board[3][3], const enum Sign sign) {
 	return 0;
 }
 
-// WIP
-/*
-int get_input_complete_row(enum Sign board[3][3], const enum Sign sign) {
+
+
+int get_input_complete_row(enum Sign b[3][3], const enum Sign sign) {
+	const enum Sign other = (sign == CROSS) ? CIRCLE : CROSS;
 	for (int i = 0; i < 3; ++i) {
-		// Check for winning row.
-		if (b[i][0] != NONE && b[i][0] == b[i][1] && b[i][0] == b[i][2]) {
-			return b[i][0];
-		}
-		// Check for winnig column.
-		if (b[0][i] != NONE && b[0][i] == b[1][i] && b[0][i] == b[2][i]) {
-			return b[0][i];
-		}
+		if (b[i][0] == other && b[i][1] == other && b[i][2] == NONE) { return GET_NUMPAD_NUM(i, 2); }
+		if (b[i][0] == other && b[i][2] == other && b[i][1] == NONE) { return GET_NUMPAD_NUM(i, 1); }
+		if (b[i][1] == other && b[i][2] == other && b[i][0] == NONE) { return GET_NUMPAD_NUM(i, 0); }
+
+		if (b[0][i] == other && b[1][i] == other && b[2][i] == NONE) { return GET_NUMPAD_NUM(2, i); }
+		if (b[0][i] == other && b[2][i] == other && b[1][i] == NONE) { return GET_NUMPAD_NUM(1, i); }
+		if (b[1][i] == other && b[2][i] == other && b[0][i] == NONE) { return GET_NUMPAD_NUM(0, i); }
 	}
 
-	if (b[0][0] != NONE && b[0][0] == b[1][1] && b[0][0] == b[2][2]) {
-		return b[0][0];
-	}
-	if (b[1][1] != NONE && b[1][1] == b[2][0] && b[0][2] == b[1][1]) {
-		return b[1][1];
+	if (b[0][0] == other && b[1][1] == other && b[2][2] == NONE) { return GET_NUMPAD_NUM(2, 2); }
+	if (b[0][0] == other && b[2][2] == other && b[1][1] == NONE) { return GET_NUMPAD_NUM(1, 1); }
+	if (b[1][1] == other && b[2][2] == other && b[0][0] == NONE) { return GET_NUMPAD_NUM(0, 0); }
+
+	if (b[0][2] == other && b[1][1] == other && b[2][0] == NONE) { return GET_NUMPAD_NUM(2, 0); }
+	if (b[0][2] == other && b[2][0] == other && b[1][1] == NONE) { return GET_NUMPAD_NUM(1, 1); }
+	if (b[1][1] == other && b[2][0] == other && b[0][2] == NONE) { return GET_NUMPAD_NUM(0, 2); }
+
+	for (int i = 0; i < 3; ++i) {
+		if (b[i][0] == sign && b[i][1] == sign && b[i][2] == NONE) { return GET_NUMPAD_NUM(i, 2); }
+		if (b[i][0] == sign && b[i][2] == sign && b[i][1] == NONE) { return GET_NUMPAD_NUM(i, 1); }
+		if (b[i][1] == sign && b[i][2] == sign && b[i][0] == NONE) { return GET_NUMPAD_NUM(i, 0); }
+
+		if (b[0][i] == sign && b[1][i] == sign && b[2][i] == NONE) { return GET_NUMPAD_NUM(2, i); }
+		if (b[0][i] == sign && b[2][i] == sign && b[1][i] == NONE) { return GET_NUMPAD_NUM(1, i); }
+		if (b[1][i] == sign && b[2][i] == sign && b[0][i] == NONE) { return GET_NUMPAD_NUM(0, i); }
 	}
 
-	return NONE;
+	if (b[0][0] == sign && b[1][1] == sign && b[2][2] == NONE) { return GET_NUMPAD_NUM(2, 2); }
+	if (b[0][0] == sign && b[2][2] == sign && b[1][1] == NONE) { return GET_NUMPAD_NUM(1, 1); }
+	if (b[1][1] == sign && b[2][2] == sign && b[0][0] == NONE) { return GET_NUMPAD_NUM(0, 0); }
+
+	if (b[0][2] == sign && b[1][1] == sign && b[2][0] == NONE) { return GET_NUMPAD_NUM(2, 0); }
+	if (b[0][2] == sign && b[2][0] == sign && b[1][1] == NONE) { return GET_NUMPAD_NUM(1, 1); }
+	if (b[1][1] == sign && b[2][0] == sign && b[0][2] == NONE) { return GET_NUMPAD_NUM(0, 2); }
+
+	return get_input_random(b, sign);
 }
-*/
+
 
 int get_input_random(enum Sign board[3][3], const enum Sign sign){
 	int ff = 0;

@@ -123,7 +123,7 @@ int play_game(enum Sign board[3][3], const bool is_multiplayer) {
 			);
 		} else {
 			err = handle_input(
-				board, player, &get_input_from_player, &get_input_random
+				board, player, &get_input_from_player, &get_input_complete_row
 			);
 		}
 		if (err) { return err; }
@@ -143,7 +143,7 @@ int play_game(enum Sign board[3][3], const bool is_multiplayer) {
 		if (is_multiplayer) {
 			puts("Kreuz hat gewonnen.");
 		} else {
-			puts("Du hast gewwonen.");
+			puts("Du hast gewonnen.");
 		}
 		break;
 	case CIRCLE:
