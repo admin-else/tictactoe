@@ -10,7 +10,7 @@
 int get_input_next_free_space(enum Sign board[3][3], const enum Sign sign) {
 	for (int i = 1; i <= 9; ++i) {
 		if (GET(board, i) == NONE) {
-            printf("*[%c]: %d\n", sign, i);
+			printf("*[%c]: %d\n", sign, i);
 			return i;
 		}
 	}
